@@ -238,6 +238,12 @@ namespace AvaloniaTuring.ViewModels
 
     public class Rules : TuringObject
     {
+
+        public int nextstate;
+        public char currSymbol;
+        public TuringDirection currDirection;
+        public bool isRule;
+
         public Rules()
         {
             ID = GlobalData.Instance.gTuringObjectNum;
