@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace AvaloniaTuring.ViewModels
@@ -133,6 +134,99 @@ namespace AvaloniaTuring.ViewModels
 
     public class Ribbon : TuringObject
     {
+        public string In;
+        public string Out;
+
+        public bool ReadXML(string file)
+        {
+            try
+            {
+
+                XmlDocument xDoc = new XmlDocument();
+                xDoc.Load(file);
+                // получим корневой элемент
+                XmlElement? xRoot = xDoc.DocumentElement;
+
+                if (xRoot != null)
+                {
+                    // обход всех узлов в корневом элементе
+                    foreach (XmlElement xnode in xRoot)
+                    {
+                        // получаем атрибут name
+                        // XmlNode? attr = xnode.Attributes.GetNamedItem("name");
+                        //  Console.WriteLine(attr?.Value);
+
+                        if (xnode.Name == "In")
+                        {
+                            Debug.WriteLine($"in: {xnode.InnerText}");
+                            this.In = xnode.InnerText;
+                        }
+                        // если узел age
+                        if (xnode.Name == "Out")
+                        {
+                            Debug.WriteLine($"out: {xnode.InnerText}");
+                            this.Out = xnode.InnerText;
+                        }
+
+                        // обходим все дочерние узлы элемента user
+
+                        /*  foreach (XmlNode childnode in xnode.ChildNodes)
+                          {
+                              // если узел - company
+                              if (childnode.Name == "In")
+                              {
+                                  Debug.WriteLine($"Company: {childnode.InnerText}");
+                              }
+                              // если узел age
+                              if (childnode.Name == "Out")
+                              {
+                                  Debug.WriteLine($"Age: {childnode.InnerText}");
+                              }
+                          }*/
+                        Debug.WriteLine(" --- - ");
+                    }
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+
+            return false;
+        }
+
+        public bool SaveXML(string file)
+        {
+            try
+            {
+                XmlDocument xDoc = new XmlDocument();
+                XmlElement? xRoot = xDoc.CreateElement("Ribbon");
+
+                XmlDeclaration xmlDeclaration = xDoc.CreateXmlDeclaration("1.0", "UTF-8", null);
+
+
+                XmlElement inElement = xDoc.CreateElement("In");
+                XmlText inText = xDoc.CreateTextNode("123445");
+                XmlText outText = xDoc.CreateTextNode("53421");
+                inElement.AppendChild(inText);
+                XmlElement outElement = xDoc.CreateElement("Out");
+                outElement.AppendChild(outText);
+                xRoot.AppendChild(inElement);
+                xRoot.AppendChild(outElement);
+                xDoc.AppendChild(xRoot);
+                xDoc.InsertBefore(xmlDeclaration, xRoot);
+                xDoc.Save(file);
+                Debug.WriteLine("saved xml");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+            return false;
+        }
+
         public Ribbon()
         {
             ID = GlobalData.Instance.gTuringObjectNum;
@@ -255,6 +349,79 @@ namespace AvaloniaTuring.ViewModels
             return ID;
         }
 
+    }
 
+    public class TuringMachine : TuringObject
+    {
+
+        public TuringMachine()
+        {
+            ID = GlobalData.Instance.gTuringObjectNum;
+            GlobalData.Instance.gTuringObjectNum++;
+        }
+
+        public override int GetID()
+        {
+            return ID;
+        }
+        public bool ReadXML(string file)
+        {
+            try
+            {
+                XmlDocument xDoc = new XmlDocument();
+                xDoc.Load(file);
+                // получим корневой элемент
+                XmlElement? xRoot = xDoc.DocumentElement;
+
+                if (xRoot != null)
+                {
+                    // обход всех узлов в корневом элементе
+                    foreach (XmlElement xnode in xRoot)
+                    {
+                        // получаем атрибут name
+                        // XmlNode? attr = xnode.Attributes.GetNamedItem("name");
+                        //  Console.WriteLine(attr?.Value);
+
+                        if (xnode.Name == "Alphabet")
+                        {
+                            foreach (XmlNode childnode in xnode.ChildNodes)
+                            {
+                                // если узел - company
+                                if (childnode.Name == "Symbol")
+                                {
+                                    Debug.WriteLine($"symbol: {childnode.InnerText}");
+                                }
+                            }
+                        }
+                        // если узел age
+                        if (xnode.Name == "Rules")
+                        {
+                            foreach (XmlNode childnode in xnode.ChildNodes)
+                            {
+                                // если узел - company
+                                if (childnode.Name == "Rule")
+                                {
+
+                                    XmlNode? attr = childnode.Attributes.GetNamedItem("CurentSymbol");
+
+                                    Debug.WriteLine($"rule: {attr?.Value}");
+                                }
+                            }
+
+                        }
+
+
+                        Debug.WriteLine(" --- - ");
+                    }
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+            return false;
+        }
     }
 }
