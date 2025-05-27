@@ -107,6 +107,13 @@ namespace AvaloniaTuring.ViewModels
             set { _RibbonSymbol = value; }
         }
 
+        public RibbonCell(char t1)
+        {
+            ID = GlobalData.Instance.gTuringObjectNum;
+            GlobalData.Instance.gTuringObjectNum++;
+            Set(t1);
+        }
+
         public RibbonCell()
         {
             ID = GlobalData.Instance.gTuringObjectNum;
@@ -136,6 +143,10 @@ namespace AvaloniaTuring.ViewModels
     {
         public string In;
         public string Out;
+        public int currentPosition;
+        public List<RibbonCell> ribbonCells;
+
+
 
         public bool ReadXML(string file)
         {
@@ -185,6 +196,18 @@ namespace AvaloniaTuring.ViewModels
                           }*/
                         Debug.WriteLine(" --- - ");
                     }
+
+                    int len1 = this.In.Length;
+
+                    for (int i = 0; i < len1; i++)
+                    {
+                        char t1 = this.In[i];
+
+                        ribbonCells.Add(new RibbonCell(t1));
+
+                    }
+
+
                     return true;
                 }
             }
@@ -233,6 +256,7 @@ namespace AvaloniaTuring.ViewModels
             GlobalData.Instance.gTuringObjectNum++;
             currentPosition = 0;
             ribbonCells = new List<RibbonCell>();
+
         }
 
         public override int GetID()
@@ -240,8 +264,6 @@ namespace AvaloniaTuring.ViewModels
             return ID;
         }
 
-        public int currentPosition;
-        public List<RibbonCell> ribbonCells;
 
         public bool Left()
         {
@@ -328,20 +350,52 @@ namespace AvaloniaTuring.ViewModels
             return ribbon;
         }
 
+        internal char ReadCell()
+        {
+            try
+            {
+                return ribbonCells[currentPosition].RibbonSymbol;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                return '\0';
+            }
+        }
+
+        public void SetCellValue(char currentSymbol)
+        {
+            try
+            {
+                ribbonCells[currentPosition].RibbonSymbol = currentSymbol;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+        }
+
+        internal void Add(char v)
+        {
+            ribbonCells.Add(new RibbonCell(v));
+        }
     }
 
-    public class Rules : TuringObject
+    public class Rule : TuringObject
     {
 
-        public int nextstate;
-        public char currSymbol;
+        public int nextState;
+        public int currentState;
+        public char currentSymbol;
+        public char symbolToWrite;
         public TuringDirection currDirection;
         public bool isRule;
 
-        public Rules()
+        public Rule()
         {
             ID = GlobalData.Instance.gTuringObjectNum;
             GlobalData.Instance.gTuringObjectNum++;
+            isRule = false;
         }
 
         public override int GetID()
@@ -353,11 +407,14 @@ namespace AvaloniaTuring.ViewModels
 
     public class TuringMachine : TuringObject
     {
-
+        public List<char> Alphabet = new List<char>();
+        public int maxStates;
+        public List<Rule> Rules = new List<Rule>();
         public TuringMachine()
         {
             ID = GlobalData.Instance.gTuringObjectNum;
             GlobalData.Instance.gTuringObjectNum++;
+            maxStates = 0;
         }
 
         public override int GetID()
@@ -390,21 +447,82 @@ namespace AvaloniaTuring.ViewModels
                                 if (childnode.Name == "Symbol")
                                 {
                                     Debug.WriteLine($"symbol: {childnode.InnerText}");
+                                    try
+                                    {
+                                        if (childnode != null)
+                                            Alphabet.Add(char.Parse(childnode.InnerText));
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Debug.WriteLine(ex.ToString());
+                                    }
                                 }
                             }
                         }
                         // если узел age
                         if (xnode.Name == "Rules")
                         {
+                            XmlNode? mStates = xnode.Attributes.GetNamedItem("MaxStates");
+                            if (mStates != null)
+                            {
+                                maxStates = int.Parse(mStates.Value);
+                            }
+
                             foreach (XmlNode childnode in xnode.ChildNodes)
                             {
                                 // если узел - company
                                 if (childnode.Name == "Rule")
                                 {
+                                    Rule rule = new Rule();
+                                    XmlNode? cSym = childnode.Attributes.GetNamedItem("CurentSymbol");
+                                    if (cSym != null)
+                                    {
+                                        rule.currentSymbol = char.Parse(cSym.Value);
+                                    }
+                                    XmlNode? cState = childnode.Attributes.GetNamedItem("CurrentState");
+                                    if (cState != null)
+                                    {
+                                        rule.currentState = int.Parse(cState.Value);
+                                    }
+                                    XmlNode? sToWrite = childnode.Attributes.GetNamedItem("SymbolToWrite");
+                                    if (sToWrite != null)
+                                    {
+                                        rule.symbolToWrite = char.Parse(sToWrite.Value);
+                                    }
+                                    XmlNode? nState = childnode.Attributes.GetNamedItem("NextState");
+                                    if (nState != null)
+                                    {
+                                        rule.nextState = int.Parse(nState.Value);
+                                    }
+                                    XmlNode? bRul = childnode.Attributes.GetNamedItem("IsRule");
+                                    if (bRul != null)
+                                    {
+                                        if (int.Parse(bRul.Value) == 1)
+                                            rule.isRule = true;
+                                        else
+                                            rule.isRule = false;
+                                    }
+                                    XmlNode? dir = childnode.Attributes.GetNamedItem("Direction");
+                                    if (dir != null)
+                                    {
+                                        char t1 = char.Parse(dir.Value);
+                                        switch (t1)
+                                        {
+                                            case 'R':
+                                                rule.currDirection = TuringDirection.Right;
+                                                break;
+                                            case 'L':
+                                                rule.currDirection = TuringDirection.Left;
+                                                break;
+                                            case 'N':
+                                                rule.currDirection = TuringDirection.Stay;
+                                                break;
 
-                                    XmlNode? attr = childnode.Attributes.GetNamedItem("CurentSymbol");
+                                        }
 
-                                    Debug.WriteLine($"rule: {attr?.Value}");
+                                        // Debug.WriteLine($"rule: {attr?.Value}");
+                                    }
+                                    Rules.Add(rule);
                                 }
                             }
 
@@ -416,6 +534,110 @@ namespace AvaloniaTuring.ViewModels
 
                     return true;
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+            return false;
+        }
+
+        Rule GetRules(int aplhaNum, int currState)
+        {
+            try
+            {
+              //  Rule rule = new Rule();
+                char currSymbol = Alphabet[aplhaNum];
+                foreach (Rule rule1 in Rules)
+                {
+                    if (rule1.isRule)
+                    {
+                        if (rule1.currentState == currState)
+                        {
+                            if (rule1.currentSymbol==currSymbol)
+                            {
+                                return rule1;
+                            }
+                        }
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                return null;
+
+            }
+        }
+
+
+        public bool Solve(Ribbon ribbon)
+        {
+            if (ribbon == null) return false;
+            try
+            {
+                ribbon.Top();
+
+                bool done = false;
+                char tempChar;
+                int currAlphabetNum;
+                int maxAlphabet = Alphabet.Count;
+                int currentTuringMachineState = 0;
+                int i = 0;
+                do
+                {
+                    tempChar = ribbon.ReadCell();
+                    currAlphabetNum = -1;
+                    for (i = 0; i < maxAlphabet; i++)
+                        if (tempChar == Alphabet[i])
+                        {
+                            currAlphabetNum = i;
+                            i = maxAlphabet;
+                        }
+                    if ((currAlphabetNum >= 0) && (currAlphabetNum < maxAlphabet))
+                    {
+                        Rule rule1 = GetRules(currAlphabetNum, currentTuringMachineState);
+                        if ((rule1!=null)&&(rule1.isRule))
+                        {
+                            ribbon.SetCellValue(rule1.currentSymbol);
+                            if (!ribbon.Move(rule1.currDirection))
+                            {
+                                if (rule1.currDirection == TuringDirection.Right)
+                                {
+                                    ribbon.Add('_');
+                                    if (!ribbon.Move(rule1.currDirection))
+                                    {
+                                        //std::cout << " Error !!!!";
+                                        Debug.WriteLine(" Error !!!!");
+                                        //system("PAUSE");
+                                    }
+                                }
+                            }
+                            currentTuringMachineState = rule1.nextState;
+                            if (currentTuringMachineState == maxStates)
+                                done = true;
+                        }
+                    }
+                    else
+                    {
+                        /// символ не найден в алфавите
+                        if ((currAlphabetNum == -1) && (i == maxAlphabet))
+                        {
+                            Rule rule2 = GetRules(i, currentTuringMachineState);
+                            if ((rule2!=null)&&(rule2.isRule))
+                            {
+                                ribbon.SetCellValue(rule2.currentSymbol);
+                                ribbon.Move(rule2.currDirection);
+                                currentTuringMachineState = rule2.nextState;
+                                if (currentTuringMachineState == maxStates)
+                                    done = true;
+                            }
+                        }
+                    }
+                } while (!done);
+
+                return true;
             }
             catch (Exception ex)
             {

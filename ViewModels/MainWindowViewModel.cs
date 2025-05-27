@@ -22,11 +22,15 @@ namespace AvaloniaTuring.ViewModels
         private void OpenThePodBayDoors()
         {
             Ribbon ribbon = new Ribbon();
-            // ribbon.ReadXML("ribbon.xml");
+            ribbon.ReadXML("ribbon.xml");
             //  ribbon.SaveXML("gg.xml");
 
             TuringMachine turingMachine = new TuringMachine();
             turingMachine.ReadXML("turing1.xml");
+
+            turingMachine.Solve(ribbon);
+
+
             Debug.WriteLine("test");
             
             //throw new NotImplementedException();
