@@ -230,8 +230,8 @@ namespace AvaloniaTuring.ViewModels
 
 
                 XmlElement inElement = xDoc.CreateElement("In");
-                XmlText inText = xDoc.CreateTextNode("123445");
-                XmlText outText = xDoc.CreateTextNode("53421");
+                XmlText inText = xDoc.CreateTextNode(this.In);
+                XmlText outText = xDoc.CreateTextNode(this.Out);
                 inElement.AppendChild(inText);
                 XmlElement outElement = xDoc.CreateElement("Out");
                 outElement.AppendChild(outText);
@@ -561,6 +561,7 @@ namespace AvaloniaTuring.ViewModels
                         }
                     }
                 }
+                
                 return null;
             }
             catch (Exception ex)
@@ -600,12 +601,12 @@ namespace AvaloniaTuring.ViewModels
                         Rule rule1 = GetRules(currAlphabetNum, currentTuringMachineState);
                         if ((rule1!=null)&&(rule1.isRule))
                         {
-                            ribbon.SetCellValue(rule1.currentSymbol);
+                            ribbon.SetCellValue(rule1.symbolToWrite);
                             if (!ribbon.Move(rule1.currDirection))
                             {
                                 if (rule1.currDirection == TuringDirection.Right)
                                 {
-                                    ribbon.Add('_');
+                                    ribbon.Add('*');
                                     if (!ribbon.Move(rule1.currDirection))
                                     {
                                         //std::cout << " Error !!!!";
@@ -616,7 +617,15 @@ namespace AvaloniaTuring.ViewModels
                             }
                             currentTuringMachineState = rule1.nextState;
                             if (currentTuringMachineState == maxStates)
+                            {
+                                List<char> t11 = new List<char>();
+                                foreach(RibbonCell cell in ribbon.ribbonCells)
+                                {
+                                    t11.Add(cell.RibbonSymbol);
+                                }
+                                ribbon.Out = new string(t11.ToArray());
                                 done = true;
+                            }
                         }
                     }
                     else
@@ -627,7 +636,7 @@ namespace AvaloniaTuring.ViewModels
                             Rule rule2 = GetRules(i, currentTuringMachineState);
                             if ((rule2!=null)&&(rule2.isRule))
                             {
-                                ribbon.SetCellValue(rule2.currentSymbol);
+                                ribbon.SetCellValue(rule2.symbolToWrite);
                                 ribbon.Move(rule2.currDirection);
                                 currentTuringMachineState = rule2.nextState;
                                 if (currentTuringMachineState == maxStates)

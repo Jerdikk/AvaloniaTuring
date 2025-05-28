@@ -14,22 +14,21 @@ namespace AvaloniaTuring.ViewModels
         public MainWindowViewModel()
         {
             BuyMusicCommand = ReactiveCommand.Create(OpenThePodBayDoors);
-
-
-
         }
 
         private void OpenThePodBayDoors()
         {
             Ribbon ribbon = new Ribbon();
-            ribbon.ReadXML("ribbon.xml");
-            //  ribbon.SaveXML("gg.xml");
+            //ribbon.ReadXML("ribbon.xml");
+            ribbon.ReadXML("ribbon1.xml");
 
             TuringMachine turingMachine = new TuringMachine();
-            turingMachine.ReadXML("turing1.xml");
+            //turingMachine.ReadXML("turing1.xml");
+            turingMachine.ReadXML("turing2.xml");
 
             turingMachine.Solve(ribbon);
 
+            ribbon.SaveXML("outribbon1.xml");
 
             Debug.WriteLine("test");
             
