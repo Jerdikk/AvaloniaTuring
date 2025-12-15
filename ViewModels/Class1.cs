@@ -147,6 +147,10 @@ namespace AvaloniaTuring.ViewModels
         {
             try
             {
+                ribbonCells.Clear();
+                In = "";
+                Out = "";
+                currentPosition = 0;
 
                 XmlDocument xDoc = new XmlDocument();
                 xDoc.Load(file);
@@ -402,6 +406,7 @@ namespace AvaloniaTuring.ViewModels
 
     public class TuringMachine : TuringObject
     {
+        int currentTuringMachineState;
         public List<char> Alphabet = new List<char>();
         public int maxStates;
         public List<Rule> Rules = new List<Rule>();
@@ -409,6 +414,7 @@ namespace AvaloniaTuring.ViewModels
         {
             ID = GlobalData.Instance.gTuringObjectNum;
             GlobalData.Instance.gTuringObjectNum++;
+            currentTuringMachineState = 0;
             maxStates = 0;
         }
 
@@ -579,7 +585,7 @@ namespace AvaloniaTuring.ViewModels
                 char tempChar;
                 int currAlphabetNum;
                 int maxAlphabet = Alphabet.Count;
-                int currentTuringMachineState = 0;
+                currentTuringMachineState = 0;
                 int i = 0;
                 do
                 {
@@ -591,30 +597,18 @@ namespace AvaloniaTuring.ViewModels
                             currAlphabetNum = i;
                             i = maxAlphabet;
                         }
+
                     if ((currAlphabetNum >= 0) && (currAlphabetNum < maxAlphabet))
                     {
                         Rule rule1 = GetRules(currAlphabetNum, currentTuringMachineState);
+
                         if ((rule1!=null)&&(rule1.isRule))
-                        {
-                            ribbon.SetCellValue(rule1.symbolToWrite);
-                            if (!ribbon.Move(rule1.currDirection))
-                            {
-                                if (rule1.currDirection == TuringDirection.Right)
-                                {
-                                    ribbon.Add('*');
-                                    if (!ribbon.Move(rule1.currDirection))
-                                    {
-                                        //std::cout << " Error !!!!";
-                                        Debug.WriteLine(" Error !!!!");
-                                        //system("PAUSE");
-                                    }
-                                }
-                            }
-                            currentTuringMachineState = rule1.nextState;
+                        {                            
+                            currentTuringMachineState = DoStep(ribbon, rule1);
                             if (currentTuringMachineState == maxStates)
                             {
                                 List<char> t11 = new List<char>();
-                                foreach(RibbonCell cell in ribbon.ribbonCells)
+                                foreach (RibbonCell cell in ribbon.ribbonCells)
                                 {
                                     t11.Add(cell.RibbonSymbol);
                                 }
@@ -631,14 +625,18 @@ namespace AvaloniaTuring.ViewModels
                             Rule rule2 = GetRules(i, currentTuringMachineState);
                             if ((rule2!=null)&&(rule2.isRule))
                             {
-                                ribbon.SetCellValue(rule2.symbolToWrite);
+                                /*ribbon.SetCellValue(rule2.symbolToWrite);
                                 ribbon.Move(rule2.currDirection);
-                                currentTuringMachineState = rule2.nextState;
+                                currentTuringMachineState = rule2.nextState;*/
+                                currentTuringMachineState = DoStep(ribbon, rule2);
                                 if (currentTuringMachineState == maxStates)
                                     done = true;
                             }
                         }
                     }
+
+                    
+
                 } while (!done);
 
                 return true;
@@ -648,6 +646,25 @@ namespace AvaloniaTuring.ViewModels
                 Debug.WriteLine(ex.ToString());
             }
             return false;
+        }
+
+        private static int DoStep(Ribbon ribbon, Rule rule)
+        {
+            ribbon.SetCellValue(rule.symbolToWrite);
+            if (!ribbon.Move(rule.currDirection))
+            {
+                if (rule.currDirection == TuringDirection.Right)
+                {
+                    ribbon.Add('*');
+                    if (!ribbon.Move(rule.currDirection))
+                    {
+                        //std::cout << " Error !!!!";
+                        Debug.WriteLine(" Error !!!!");
+                        //system("PAUSE");
+                    }
+                }
+            }
+            return rule.nextState;
         }
     }
 }

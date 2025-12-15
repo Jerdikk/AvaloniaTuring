@@ -127,7 +127,7 @@ namespace AvaloniaTuring.ViewModels
 
         private void SolveQ()
         {
-            try            
+            try
             {
                 ribbon.ReadXML("ribbon1.xml");
                 TuringMachine turingMachine = new TuringMachine();
@@ -149,67 +149,81 @@ namespace AvaloniaTuring.ViewModels
 
         private void ShowRibbon(Ribbon ribbon, int startPos)
         {
-            if (ribbon != null)
+            try
             {
-                if (ribbon.ribbonCells != null)
+                if (ribbon != null)
                 {
-                    t01 = startPos.ToString();
-                    t02 = (startPos + 1).ToString();
-                    t03 = (startPos + 2).ToString();
-                    t04 = (startPos + 3).ToString();
-                    t05 = (startPos + 4).ToString();
-                    t06 = (startPos + 5).ToString();
-                    t07 = (startPos + 6).ToString();
+                    if (ribbon.ribbonCells != null)
+                    {
+                        t01 = startPos.ToString();
+                        t02 = (startPos + 1).ToString();
+                        t03 = (startPos + 2).ToString();
+                        t04 = (startPos + 3).ToString();
+                        t05 = (startPos + 4).ToString();
+                        t06 = (startPos + 5).ToString();
+                        t07 = (startPos + 6).ToString();
 
-                    if (ribbon.ribbonCells.Count > startPos)
-                        t11 = ribbon.ribbonCells[0 + startPos].RibbonSymbol.ToString();
-                    else
-                        t11 = "";
-                    if (ribbon.ribbonCells.Count > (startPos + 1))
-                        t12 = ribbon.ribbonCells[1 + startPos].RibbonSymbol.ToString();
-                    else
-                        t12 = "";
-                    if (ribbon.ribbonCells.Count > (startPos + 2))
-                        t13 = ribbon.ribbonCells[2 + startPos].RibbonSymbol.ToString();
-                    else
-                        t13 = "";
-                    if (ribbon.ribbonCells.Count > (startPos + 3))
-                        t14 = ribbon.ribbonCells[3 + startPos].RibbonSymbol.ToString();
-                    else
-                        t14 = "";
-                    if (ribbon.ribbonCells.Count > (startPos + 4))
-                        t15 = ribbon.ribbonCells[4 + startPos].RibbonSymbol.ToString();
-                    else
-                        t15 = "";
-                    if (ribbon.ribbonCells.Count > (startPos + 5))
-                        t16 = ribbon.ribbonCells[5 + startPos].RibbonSymbol.ToString();
-                    else
-                        t16 = "";
-                    if (ribbon.ribbonCells.Count > (startPos + 6))
-                        t17 = ribbon.ribbonCells[6 + startPos].RibbonSymbol.ToString();
-                    else
-                        t17 = "";
+                        if (ribbon.ribbonCells.Count > startPos)
+                            t11 = ribbon.ribbonCells[0 + startPos].RibbonSymbol.ToString();
+                        else
+                            t11 = "";
+                        if (ribbon.ribbonCells.Count > (startPos + 1))
+                            t12 = ribbon.ribbonCells[1 + startPos].RibbonSymbol.ToString();
+                        else
+                            t12 = "";
+                        if (ribbon.ribbonCells.Count > (startPos + 2))
+                            t13 = ribbon.ribbonCells[2 + startPos].RibbonSymbol.ToString();
+                        else
+                            t13 = "";
+                        if (ribbon.ribbonCells.Count > (startPos + 3))
+                            t14 = ribbon.ribbonCells[3 + startPos].RibbonSymbol.ToString();
+                        else
+                            t14 = "";
+                        if (ribbon.ribbonCells.Count > (startPos + 4))
+                            t15 = ribbon.ribbonCells[4 + startPos].RibbonSymbol.ToString();
+                        else
+                            t15 = "";
+                        if (ribbon.ribbonCells.Count > (startPos + 5))
+                            t16 = ribbon.ribbonCells[5 + startPos].RibbonSymbol.ToString();
+                        else
+                            t16 = "";
+                        if (ribbon.ribbonCells.Count > (startPos + 6))
+                            t17 = ribbon.ribbonCells[6 + startPos].RibbonSymbol.ToString();
+                        else
+                            t17 = "";
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
             }
         }
 
         internal void OnKey(Key key)
         {
-            switch (key)
+            try
             {
-                case Avalonia.Input.Key.Left:
-                    IndexInRibbon--;
-                    if (IndexInRibbon < 0) IndexInRibbon = 0;
-                    break;
-                case Avalonia.Input.Key.Right:
-                    IndexInRibbon++;
-                    if (IndexInRibbon >(ribbon.ribbonCells.Count-1) ) IndexInRibbon = ribbon.ribbonCells.Count - 1;
-                    break;
-                default:
-                    int hh = 1;
-                    break;
+                switch (key)
+                {
+                    case Avalonia.Input.Key.Left:
+                        IndexInRibbon--;
+                        if (IndexInRibbon < 0) IndexInRibbon = 0;
+                        break;
+                    case Avalonia.Input.Key.Right:
+                        IndexInRibbon++;
+                        if (IndexInRibbon > (ribbon.ribbonCells.Count - 1)) IndexInRibbon = ribbon.ribbonCells.Count - 1;
+                        break;
+                    default:
+                        int hh = 1;
+                        break;
+                }
+                ShowRibbon(ribbon, IndexInRibbon);
             }
-            ShowRibbon(ribbon, IndexInRibbon);
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
         }
     }
 }
