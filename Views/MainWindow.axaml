@@ -1,29 +1,66 @@
 <Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:AvaloniaTuring.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="AvaloniaTuring.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:vm="using:AvaloniaTuring.ViewModels"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		x:Class="AvaloniaTuring.Views.MainWindow"
+		x:DataType="vm:MainWindowViewModel"
 		x:CompileBindings="True"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="AvaloniaTuring">
+		Icon="/Assets/avalonia-logo.ico"
+		Title="AvaloniaTuring" KeyUp="Window_KeyUp">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+		to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition/>
+			<RowDefinition Height="80"/>
 			<RowDefinition/>
 			<RowDefinition/>
 		</Grid.RowDefinitions>
-		<TextBlock Grid.Row="0" Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>		
-		<Button Grid.Row="1" Width="120" Height="35" Margin="5" Content="Solve" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" Command="{Binding BuyMusicCommand}"/>
+		<Grid Grid.Row="0" Height="70">
+			<!--<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
+			<Border BorderThickness="1" BorderBrush="Black" Margin="5">
+				<Grid ShowGridLines="True" >
+					<Grid.RowDefinitions>
+						<RowDefinition Height="25"/>
+						<RowDefinition Height="25"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+					</Grid.ColumnDefinitions>
+					<TextBlock x:Name="t00" Text="Индекс" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<TextBlock x:Name="t01" Text="{Binding t01}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<TextBlock x:Name="t02" Text="{Binding t02}" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<TextBlock x:Name="t03" Text="{Binding t03}" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<TextBlock x:Name="t04" Text="{Binding t04}" Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<TextBlock x:Name="t05" Text="{Binding t05}" Grid.Row="0" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<TextBlock x:Name="t06" Text="{Binding t06}" Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<TextBlock x:Name="t07" Text="{Binding t07}" Grid.Row="0" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+					<TextBlock x:Name="t10" Text="Значение" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<TextBlock x:Name="t11" Text="{Binding t11}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<TextBlock x:Name="t12" Text="{Binding t12}" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<TextBlock x:Name="t13" Text="{Binding t13}" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<TextBlock x:Name="t14" Text="{Binding t14}" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<TextBlock x:Name="t15" Text="{Binding t15}" Grid.Row="1" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<TextBlock x:Name="t16" Text="{Binding t16}" Grid.Row="1" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<TextBlock x:Name="t17" Text="{Binding t17}" Grid.Row="1" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+				</Grid>
+			</Border>
+		</Grid>
+		<Button Grid.Row="1" Width="120" Height="35" Margin="5" Content="Solve" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" Command="{Binding SolveCommand}"/>
 	</Grid>
-    
+
 
 </Window>

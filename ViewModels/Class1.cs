@@ -81,9 +81,7 @@ namespace AvaloniaTuring.ViewModels
         }
         #endregion
 
-
         public int gTuringObjectNum;
-
         public GlobalData()
         {
             gTuringObjectNum = 0;
@@ -134,9 +132,6 @@ namespace AvaloniaTuring.ViewModels
         {
             return ID;
         }
-
-
-
     }
 
     public class Ribbon : TuringObject
