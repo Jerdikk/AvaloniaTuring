@@ -16,8 +16,14 @@ namespace AvaloniaTuring.Views
         private void Window_KeyUp(object? sender, Avalonia.Input.KeyEventArgs e)
         {
             mv = this.DataContext as MainWindowViewModel;
-            mv.OnKey(e.Key);
-         
+            mv?.OnKey(e.Key);
+
+        }
+
+        private void Window_Closing(object? sender, WindowClosingEventArgs e)
+        {
+            mv = this.DataContext as MainWindowViewModel;
+            mv?.OnClose(e);
         }
     }
 }

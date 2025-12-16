@@ -8,7 +8,7 @@
 		x:DataType="vm:MainWindowViewModel"
 		x:CompileBindings="True"
 		Icon="/Assets/avalonia-logo.ico"
-		Title="AvaloniaTuring" KeyUp="Window_KeyUp">
+		Title="AvaloniaTuring" KeyUp="Window_KeyUp" Closing="Window_Closing">
 
 	<Design.DataContext>
 		<!-- This only sets the DataContext for the previewer in an IDE,
@@ -17,15 +17,16 @@
 	</Design.DataContext>
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="80"/>
+			<RowDefinition Height="90"/>
 			<RowDefinition/>
 			<RowDefinition/>
 		</Grid.RowDefinitions>
-		<Grid Grid.Row="0" Height="70">
+		<Grid Grid.Row="0" Height="90">
 			<!--<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
 			<Border BorderThickness="1" BorderBrush="Black" Margin="5">
 				<Grid ShowGridLines="True" >
 					<Grid.RowDefinitions>
+						<RowDefinition Height="25"/>
 						<RowDefinition Height="25"/>
 						<RowDefinition Height="25"/>
 					</Grid.RowDefinitions>
@@ -56,6 +57,15 @@
 					<TextBlock x:Name="t15" Text="{Binding t15}" Grid.Row="1" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 					<TextBlock x:Name="t16" Text="{Binding t16}" Grid.Row="1" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 					<TextBlock x:Name="t17" Text="{Binding t17}" Grid.Row="1" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+					<Border x:Name="bg01" Background="{Binding Brush1}" Grid.Row="2" Grid.Column="0" />
+					<Border x:Name="bg02" Background="{Binding Brush2}" Grid.Row="2" Grid.Column="1" />
+					<Border x:Name="bg03" Background="{Binding Brush3}" Grid.Row="2" Grid.Column="2" />
+					<Border x:Name="bg04" Background="{Binding Brush4}" Grid.Row="2" Grid.Column="3" />
+					<Border x:Name="bg05" Background="{Binding Brush5}" Grid.Row="2" Grid.Column="4" />
+					<Border x:Name="bg06" Background="{Binding Brush6}" Grid.Row="2" Grid.Column="5" />
+					<Border x:Name="bg07" Background="{Binding Brush7}" Grid.Row="2" Grid.Column="6" />
+					<Border x:Name="bg08" Background="{Binding Brush8}" Grid.Row="2" Grid.Column="7" />
 				</Grid>
 			</Border>
 		</Grid>

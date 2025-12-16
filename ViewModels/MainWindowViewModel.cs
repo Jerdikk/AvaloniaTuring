@@ -1,5 +1,8 @@
-﻿using Avalonia.Input;
+﻿using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.Threading;
+using AvaloniaTuring.Models;
 using ReactiveUI;
 using System;
 using System.ComponentModel;
@@ -12,6 +15,55 @@ namespace AvaloniaTuring.ViewModels
     {
         public int IndexInRibbon;
         public ICommand SolveCommand { get; }
+
+        private Avalonia.Media.IBrush? _brush1;
+        public Avalonia.Media.IBrush? Brush1
+        {
+            get => _brush1;
+            set=> this.RaiseAndSetIfChanged(ref _brush1, value);
+        }
+        private Avalonia.Media.IBrush? _brush2;
+        public Avalonia.Media.IBrush? Brush2
+        {
+            get => _brush2;
+            set => this.RaiseAndSetIfChanged(ref _brush2, value);
+        }
+        private Avalonia.Media.IBrush? _brush3;
+        public Avalonia.Media.IBrush? Brush3
+        {
+            get => _brush3;
+            set => this.RaiseAndSetIfChanged(ref _brush3, value);
+        }
+        private Avalonia.Media.IBrush? _brush4;
+        public Avalonia.Media.IBrush? Brush4
+        {
+            get => _brush4;
+            set => this.RaiseAndSetIfChanged(ref _brush4, value);
+        }
+        private Avalonia.Media.IBrush? _brush5;
+        public Avalonia.Media.IBrush? Brush5
+        {
+            get => _brush5;
+            set => this.RaiseAndSetIfChanged(ref _brush5, value);
+        }
+        private Avalonia.Media.IBrush? _brush6;
+        public Avalonia.Media.IBrush? Brush6
+        {
+            get => _brush6;
+            set => this.RaiseAndSetIfChanged(ref _brush6, value);
+        }
+        private Avalonia.Media.IBrush? _brush7;
+        public Avalonia.Media.IBrush? Brush7
+        {
+            get => _brush7;
+            set => this.RaiseAndSetIfChanged(ref _brush7, value);
+        }
+        private Avalonia.Media.IBrush? _brush8;
+        public Avalonia.Media.IBrush? Brush8
+        {
+            get => _brush8;
+            set => this.RaiseAndSetIfChanged(ref _brush8, value);
+        }
 
         private string? _t01;
         public string? t01
@@ -63,8 +115,6 @@ namespace AvaloniaTuring.ViewModels
 
         }
 
-
-        // public string Greeting { get; } = "Welcome to Avalonia!";
         private string? _t11;
         public string? t11
         {
@@ -115,27 +165,54 @@ namespace AvaloniaTuring.ViewModels
 
         }
 
+        bool isNeedRepaint;
+
         Ribbon ribbon = new Ribbon();
+
+        private DispatcherTimer? _timer;
 
         public MainWindowViewModel()
         {
             IndexInRibbon = 0;
             ribbon.ReadXML("ribbon1.xml");
-            ShowRibbon(ribbon, IndexInRibbon);
+            isNeedRepaint = true;
+            
             SolveCommand = ReactiveCommand.Create(SolveQ);
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(0.1); 
+            _timer.Tick += Timer_Tick; 
+            _timer.Start(); 
         }
 
+        private void Timer_Tick(object? sender, EventArgs e)
+        {
+            if (isNeedRepaint)
+            {
+                ShowRibbon(ribbon, IndexInRibbon);
+                isNeedRepaint=false;
+            }
+        }
+
+        public void StopTimer()
+        {
+            _timer.Stop();
+        }
+
+        TuringMachine? turingMachine;
         private void SolveQ()
         {
             try
             {
+                Brush1 = Brushes.Beige;
                 ribbon.ReadXML("ribbon1.xml");
-                TuringMachine turingMachine = new TuringMachine();
+                turingMachine = new TuringMachine();
                 //turingMachine.ReadXML("turing1.xml");
                 turingMachine.ReadXML("turing2.xml");
-
                 turingMachine.Solve(ribbon);
-                ShowRibbon(ribbon, 0);
+                
+                IndexInRibbon = 0;
+                isNeedRepaint=true;
+                
                 ribbon.SaveXML("outribbon1.xml");
 
                 Debug.WriteLine("test");
@@ -150,7 +227,7 @@ namespace AvaloniaTuring.ViewModels
         private void ShowRibbon(Ribbon ribbon, int startPos)
         {
             try
-            {
+            {                
                 if (ribbon != null)
                 {
                     if (ribbon.ribbonCells != null)
@@ -191,6 +268,45 @@ namespace AvaloniaTuring.ViewModels
                             t17 = ribbon.ribbonCells[6 + startPos].RibbonSymbol.ToString();
                         else
                             t17 = "";
+
+                        int ribPos = ribbon.currentPosition - startPos;
+                        
+                        if ((ribPos >= 0)&&(ribPos<8))
+                        {
+                            if (ribPos==0)
+                                Brush1 = Brushes.Beige;
+                            else
+                                Brush1 = Brushes.Black;
+                            if (ribPos == 1)
+                                Brush2 = Brushes.Beige;
+                            else
+                                Brush2 = Brushes.Black;
+                            if (ribPos == 2)
+                                Brush3 = Brushes.Beige;
+                            else
+                                Brush3 = Brushes.Black;
+                            if (ribPos == 3)
+                                Brush4 = Brushes.Beige;
+                            else
+                                Brush4 = Brushes.Black;
+                            if (ribPos == 4)
+                                Brush5 = Brushes.Beige;
+                            else
+                                Brush5 = Brushes.Black;
+                            if (ribPos == 5)
+                                Brush6 = Brushes.Beige;
+                            else
+                                Brush6 = Brushes.Black;
+                            if (ribPos == 6)
+                                Brush7 = Brushes.Beige;
+                            else
+                                Brush7 = Brushes.Black;
+                            if (ribPos == 7)
+                                Brush8 = Brushes.Beige;
+                            else
+                                Brush8 = Brushes.Black;
+                        }
+
                     }
                 }
             }
@@ -218,12 +334,19 @@ namespace AvaloniaTuring.ViewModels
                         int hh = 1;
                         break;
                 }
-                ShowRibbon(ribbon, IndexInRibbon);
+                //IndexInRibbon = 0;
+                isNeedRepaint = true;
+                //ShowRibbon(ribbon, IndexInRibbon);
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e);
             }
+        }
+
+        internal void OnClose(WindowClosingEventArgs e)
+        {
+         _timer?.Stop();
         }
     }
 }
