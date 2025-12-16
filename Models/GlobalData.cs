@@ -7,10 +7,10 @@ namespace AvaloniaTuring.Models
     {
         #region Singleton
         private static object syncRoot = new object();
-        private static volatile GlobalData instance;
+        private static volatile GlobalData? instance;
         public static int programNum = 0;
-        public static string mutexString;
-        public static Mutex m = null;
+        public static string? mutexString;
+        public static Mutex? m = null;
 
         public static GlobalData Instance
         {
@@ -34,8 +34,6 @@ namespace AvaloniaTuring.Models
                             //                                                       
 
                             m = Mutex.OpenExisting(mutexString);
-
-
                         }
                         catch (WaitHandleCannotBeOpenedException)
                         {
@@ -56,9 +54,7 @@ namespace AvaloniaTuring.Models
                             m = null;
                             programNum++;
                         }
-
                     }
-
 
                     lock (syncRoot)
                     {
